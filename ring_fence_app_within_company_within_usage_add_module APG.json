@@ -1,0 +1,140 @@
+{
+	"api_version": "1.0",
+	"project_name": "RF module",
+	"id": "Ring Fence Application within Company within Usage add Module",
+	"author": "Daniel Bulai",
+	"icon_url": "https://cdn.services.guardicore.com/images/policy-tier-icon.svg",
+	"project_version": "1.2",
+	"user_configuration_defaults": {
+		"include_process_level": false,
+		"ignore_all_existing_allowed_flows": false
+	},
+	"template_configuration": {
+		"add_all_map_flows_as_allow_rules": true
+	},
+	"hashtags": {
+		"visible": [
+			"diy"
+		],
+		"hidden": [
+			"role segmentation",
+			"application",
+			"microsegmentation",
+			"micro-segmentation"
+		]
+	},
+	"variables": [
+		{
+			"id": "application",
+			"required": true,
+			"name": "Application",
+			"description": "The chosen application to secure",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key",
+						"value"
+					],
+					"placeholders": {
+						"key": "application",
+						"value": "application"
+					}
+				}
+			],
+			"configuration_id": "application_label_key"
+		},
+		{
+			"id": "company",
+			"required": true,
+			"name": "Company",
+			"description": "The chosen company to secure",
+			"creation_format": "within {{company}}",
+			"tweak_format": "within {{company}}",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key",
+						"value"
+					],
+					"placeholders": {
+						"key": "company",
+						"value": "company"
+					}
+				}
+			],
+			"configuration_id": "company_label_key"
+		},
+		{
+			"id": "usage",
+			"required": true,
+			"name": "Usage",
+			"description": "The chosen usage to secure",
+			"creation_format": "within {{usage}}",
+			"tweak_format": "within {{usage}}",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key",
+						"value"
+					],
+					"placeholders": {
+						"key": "usage",
+						"value": "usage"
+					}
+				}
+			],
+			"configuration_id": "usage"
+		},
+		{
+			"id": "module",
+			"required": true,
+			"name": "Module",
+			"description": "The chosen application to secure",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key"
+					],
+					"placeholders": {
+						"key": "module"
+					}
+				}
+			],
+			"configuration_id": "module_label_key"
+		}
+	],
+	"project_suggestion_format": "{{application}}",
+	"project_title_format": "{{project_name}}",
+	"project_creation_format": "RF {{company}} {{usage}} {{application}} {{module}}",
+	"rules": [],
+	"default_map": {
+		"use_scheduled_map": false,
+		"time_frame": "THIS_MONTH",
+		"filters": {
+			"include": {
+				"destination_label": [
+					"{{company}}",
+					"{{application}}",
+					"{{usage}}"
+				],
+				"source_label": [
+					"{{company}}",
+					"{{application}}",
+					"{{usage}}"
+				]
+			},
+			"exclude": {}
+		},
+		"grouping": [
+			"{{company}}",
+			"{{application}}",
+			"{{usage}}",
+			"{{module}}"
+		],
+		"open_selected_hierarchy": true
+	}
+	}

@@ -1,0 +1,246 @@
+{
+	"api_version": "2.0",
+	"author": "Avishag Daniely",
+	"project_name": "Ring-fence application limited to one location",
+	"id": "Ring-fence application limited to one location",
+	"icon_url": "https://cdn.services.guardicore.com/images/policy-ring-icon.svg",
+	"project_version": "3.0",
+	"user_configuration_defaults": {
+		"include_process_level": false,
+		"ignore_all_existing_allowed_flows": false
+	},
+	"template_configuration": {
+		"add_all_map_flows_as_allow_rules": true
+	},
+	"hashtags": {
+		"visible": [
+			"diy"
+		],
+		"hidden": [
+			"ring fence",
+			"application",
+			"incoming flows",
+			"allow incoming traffic",
+			"ring-fence",
+			"ring-fencing",
+			"ringfence",
+			"ringfencing",
+			"ring fencing",
+			"outgoing flows",
+			"inbound",
+			"outbound"
+		]
+	},
+	"variables": [
+		{
+			"id": "application",
+			"required": true,
+			"name": "Application",
+			"description": "The application to secure",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key",
+						"value"
+					],
+					"placeholders": {
+						"key": "application",
+						"value": "an application"
+					}
+				}
+			],
+			"configuration_id": "application_label_key"
+		},
+		{
+			"id": "environment",
+			"required": false,
+			"name": "environment",
+			"description": "An environment in which the application is running",
+			"creation_format": "within {{environment}}",
+			"tweak_format": "Secure the application within an {{environment}}",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key",
+						"value"
+					],
+					"placeholders": {
+						"key": "environment",
+						"value": "an environment"
+					}
+				}
+			]
+		},
+		{
+			"id": "role",
+			"required": false,
+			"name": "role",
+			"description": "The label by which the rules are grouped",
+			"creation_format": "grouped by {{role}}",
+			"tweak_format": "Group the application by a {{role}}",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key",
+						"value"
+					],
+					"placeholders": {
+						"key": "role",
+						"value": "a role"
+					}
+				}
+			]
+		},
+		{
+			"id": "location",
+			"required": false,
+			"name": "location",
+			"description": "The label by which the rules are grouped",
+			"creation_format": "and then by {{location}}",
+			"creation_format_secondary": "grouped by {{location}}",
+			"tweak_format": "Limit the traffic controlled to {{location}}",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key",
+						"value"
+					],
+					"placeholders": {
+						"key": "location",
+						"value": "a location"
+					}
+				}
+			]
+		}
+	],
+	"project_suggestion_format": "{{project_name}} by allowlisting inbound and outbound flows for {{application}}",
+	"project_title_format": "{{project_name}} by allowlisting inbound and outbound flows for an application",
+	"project_creation_format": "{{project_name}} by allowlisting inbound and outbound flows for {{application}} {{role:creation_format}} {{location:creation_format}} {{environment:creation_format}}",
+	"project_creation_format_secondary": "{{project_name}} by allowlisting inbound and outbound flows for {{application}} {{role:creation_format}} {{location:creation_format_secondary}} {{environment:creation_format}}",
+	"rules": [
+			{
+			"ports": [],
+			"port_ranges": [],
+			"ip_protocols": [
+				"TCP",
+				"UDP"
+			],
+			"section": "ALLOW",
+			"comments": "Allow all traffic within the application and application tiers",
+			"source": {
+				"labels": [
+					"{{environment}}",
+					"{{application}}",
+					"{{role}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			},
+			"destination": {
+				"labels": [
+					"{{environment}}",
+					"{{application}}",
+					"{{role}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			}
+		},
+		{
+			"ports": [],
+			"port_ranges": [],
+			"ip_protocols": [
+				"TCP",
+				"UDP"
+			],
+			"section": "ALERT",
+			"comments": "Alert on all incoming traffic to the application",
+			"source": {
+				"labels": [
+					"{{location}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			},
+			"destination": {
+				"labels": [
+					"{{environment}}",
+					"{{application}}",
+					"{{role}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			}
+		},
+		{
+			"ports": [],
+			"port_ranges": [],
+			"ip_protocols": [
+				"TCP",
+				"UDP"
+			],
+			"section": "ALERT",
+			"comments": "Alert on all outgoing traffic from the application",
+			"source": {
+				"labels": [
+					"{{environment}}",
+					"{{application}}",
+					"{{role}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			},
+			"destination": {
+				"labels": [
+					"{{location}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			}
+		}
+	],
+	"default_map": {
+		"use_scheduled_map": false,
+		"time_frame": "THIS_MONTH",
+		"filters": {
+			"include": {
+				"user_label": [
+					"{{environment}}",
+					"{{application}}",
+					"{{role}}"
+				],
+				"destination_label": [
+					"{{location}}"
+				],
+				"source_label": [
+					"{{location}}"
+				]
+			},
+			"exclude": {}
+		},
+		"grouping": [
+			"{{environment}}",
+			"{{application}}",
+			"{{role}}"
+		],
+		"open_selected_hierarchy": true
+	},
+	"support_labels_hierarchies": true,
+	"order_of_labels_hierarchy": ["environment", "application", "role", "location"]
+}

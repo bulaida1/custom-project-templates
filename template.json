@@ -1,0 +1,121 @@
+{
+	"api_version": "1.0",
+	"project_name": "Multiuse",
+	"id": "Multiuse",
+	"author": "Daniel Bulai",
+	"icon_url": "https://cdn.services.guardicore.com/images/policy-tier-icon.svg",
+	"project_version": "1.0",
+	"user_configuration_defaults": {
+		"include_process_level": false,
+		"ignore_all_existing_allowed_flows": false
+	},
+	"template_configuration": {
+		"add_all_map_flows_as_allow_rules": true
+	},
+	"hashtags": {
+		"visible": [
+			"diy"
+		],
+		"hidden": [
+			"role segmentation",
+			"application",
+			"microsegmentation",
+			"micro-segmentation"
+		]
+	},
+	"variables": [
+		{
+			"id": "application",
+			"required": true,
+			"name": "Application",
+			"description": "",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key",
+						"value"
+					],
+					"placeholders": {
+						"key": "application",
+						"value": "application"
+					}
+				}
+			],
+			"configuration_id": "application_label_key"
+		}
+	],
+	"project_suggestion_format": "{{project_name}} {{application}}",
+	"project_title_format": "{{project_name}}",
+	"project_creation_format": "{{project_name}} {{application}}",
+	"rules": [
+		{
+			"ports": [],
+			"port_ranges": [],
+			"ip_protocols": [
+				"TCP",
+				"UDP"
+			],
+			"section": "ALERT",
+			"comments": "",
+			"source": {
+				"labels": [],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			},
+			"destination": {
+				"labels": [
+					"{{application}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			}
+		},
+				{
+			"ports": [],
+			"port_ranges": [],
+			"ip_protocols": [
+				"TCP",
+				"UDP"
+			],
+			"section": "ALERT",
+			"comments": "",
+			"source": {
+				"labels": [
+					"{{application}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			},
+			"destination": {
+				"labels": [],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			}
+		}
+	],
+	"default_map": {
+		"use_scheduled_map": false,
+		"time_frame": "THIS_MONTH",
+		"filters": {
+			"include": {
+				"user_label": [
+					"{{application}}"
+				]
+			},
+			"exclude": {}
+		},
+		"grouping": [
+			"{{application}}"
+		],
+		"open_selected_hierarchy": true
+	}
+	}

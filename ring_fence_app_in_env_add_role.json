@@ -1,0 +1,165 @@
+{
+	"api_version": "1.0",
+	"project_name": "Ring Fence Application with Tier-Segmentation",
+	"id": "Ring Fence Application Tier-Segmentation",
+	"author": "Shlomi Salman",
+	"icon_url": "https://cdn.services.guardicore.com/images/policy-tier-icon.svg",
+	"project_version": "2.1",
+	"user_configuration_defaults": {
+		"include_process_level": false,
+		"ignore_all_existing_allowed_flows": false
+	},
+	"template_configuration": {
+		"add_all_map_flows_as_allow_rules": true
+	},
+	"hashtags": {
+		"visible": [
+			"diy"
+		],
+		"hidden": [
+			"tier segmentation",
+			"application",
+			"microsegmentation",
+			"micro-segmentation"
+		]
+	},
+	"variables": [
+		{
+			"id": "application",
+			"required": true,
+			"name": "Application",
+			"description": "The chosen application to secure",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key",
+						"value"
+					],
+					"placeholders": {
+						"key": "application",
+						"value": "an application"
+					}
+				}
+			],
+			"configuration_id": "application_label_key"
+		},
+		{
+			"id": "tier",
+			"required": true,
+			"name": "Tier",
+			"description": "The chosen tier/role label key",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key"
+					],
+					"placeholders": {
+						"key": "Role"
+					}
+				}
+			]
+		},
+		{
+			"id": "environment",
+			"required": false,
+			"name": "Environment",
+			"description": "An environment for which the application is running",
+			"creation_format": "within {{environment}}",
+			"tweak_format": "within {{environment}}",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key",
+						"value"
+					],
+					"placeholders": {
+						"key": "environment",
+						"value": "an environment"
+					}
+				}
+			]
+		}
+	],
+	"project_suggestion_format": "{{project_name}} by allowlisting flows between {{application}}'s tiers",
+	"project_title_format": "{{project_name}} by allowlisting flows between application tiers",
+	"project_creation_format": "{{project_name}} by allowlisting flows between {{application}}'s tiers, by tier label key {{tier}} {{environment:creation_format}}",
+	"rules": [
+		{
+			"ports": [],
+			"port_ranges": [],
+			"ip_protocols": [
+				"TCP",
+				"UDP"
+			],
+			"section": "ALERT",
+			"comments": "Alert on all incoming traffic to the application",
+			"source": {
+				"labels": [],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			},
+			"destination": {
+				"labels": [
+					"{{environment}}",
+					"{{application}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			}
+		},
+				{
+			"ports": [],
+			"port_ranges": [],
+			"ip_protocols": [
+				"TCP",
+				"UDP"
+			],
+			"section": "ALERT",
+			"comments": "Alert on all outgoing traffic from the application",
+			"source": {
+				"labels": [
+					"{{environment}}",
+					"{{application}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			},
+			"destination": {
+				"labels": [],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			}
+		}
+	],
+	"default_map": {
+		"use_scheduled_map": false,
+		"time_frame": "THIS_MONTH",
+		"filters": {
+			"include": {
+				"include": {
+					"user_label": [
+						"{{environment}}",
+						"{{application}}"
+					]
+				},
+				"exclude": {}
+			},
+		"grouping": [
+			"{{environment}}",
+			"{{application}}",
+			"{{tier}}"
+		],
+		"open_selected_hierarchy": true
+	}
+	}

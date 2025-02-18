@@ -1,0 +1,161 @@
+{
+	"api_version": "1.0",
+	"project_name": "Control traffic to Zone",
+	"id": "Control traffic to Zone",
+	"author": "Daniel Bulai",
+	"icon_url": "https://cdn.services.guardicore.com/images/policy-tier-icon.svg",
+	"project_version": "2.3",
+	"user_configuration_defaults": {
+		"include_process_level": false,
+		"ignore_all_existing_allowed_flows": false
+	},
+	"template_configuration": {
+		"add_all_map_flows_as_allow_rules": true
+	},
+	"hashtags": {
+		"visible": [
+			"diy"
+		],
+		"hidden": [
+			"role segmentation",
+			"application",
+			"microsegmentation",
+			"micro-segmentation"
+		]
+	},
+	"variables": [
+		{
+			"id": "zone",
+			"required": true,
+			"name": "Zone",
+			"description": "The chosen zone to secure",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key",
+						"value"
+					],
+					"placeholders": {
+						"key": "zone",
+						"value": "zone"
+					}
+				}
+			],
+			"configuration_id": "zone_label_key"
+		},
+		{
+			"id": "application",
+			"required": false,
+			"name": "Application",
+			"description": "The chosen application label key",
+			"creation_format": "by {{application}}",
+			"tweak_format": "by {{application}}",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key"
+					],
+					"placeholders": {
+						"key": "Application"
+					}
+				}
+			]
+		},
+		{
+			"id": "environment",
+			"required": false,
+			"name": "Environment",
+			"description": "The chosen environment label key",
+			"creation_format": "by {{environment}}.",
+			"tweak_format": "by {{environment}}",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key"
+					],
+					"placeholders": {
+						"key": "Environment"
+					}
+				}
+			]
+		}
+	],
+	"project_suggestion_format": "{{project_name}} {{zone}}",
+	"project_title_format": "{{project_name}}",
+	"project_creation_format": "{{project_name}} {{zone}} {{application:creation_format}} {{environment:creation_format}}",
+	"rules": [
+		{
+			"ports": [],
+			"port_ranges": [],
+			"ip_protocols": [
+				"TCP",
+				"UDP"
+			],
+			"section": "ALERT",
+			"comments": "Alert on all incoming traffic to the application",
+			"source": {
+				"labels": [],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			},
+			"destination": {
+				"labels": [
+					"{{zone}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			}
+		},
+				{
+			"ports": [],
+			"port_ranges": [],
+			"ip_protocols": [
+				"TCP",
+				"UDP"
+			],
+			"section": "ALERT",
+			"comments": "Alert on all outgoing traffic from the application",
+			"source": {
+				"labels": [
+					"{{zone}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			},
+			"destination": {
+				"labels": [],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			}
+		}
+	],
+	"default_map": {
+		"use_scheduled_map": false,
+		"time_frame": "THIS_MONTH",
+		"filters": {
+			"include": {
+				"user_label": [
+					"{{zone}}"
+				]
+			},
+			"exclude": {}
+		},
+		"grouping": [
+			"{{zone}}",
+			"{{environment}}",
+			"{{application}}"
+		],
+		"open_selected_hierarchy": true
+	}
+	}

@@ -1,0 +1,161 @@
+{
+	"api_version": "1.0",
+	"project_name": "Ring Fence Application with Environment and Role",
+	"id": "Ring Fence Application with Environment and Role",
+	"author": "Daniel Bulai",
+	"icon_url": "https://cdn.services.guardicore.com/images/policy-tier-icon.svg",
+	"project_version": "2.3",
+	"user_configuration_defaults": {
+		"include_process_level": false,
+		"ignore_all_existing_allowed_flows": false
+	},
+	"template_configuration": {
+		"add_all_map_flows_as_allow_rules": true
+	},
+	"hashtags": {
+		"visible": [
+			"diy"
+		],
+		"hidden": [
+			"role segmentation",
+			"application",
+			"microsegmentation",
+			"micro-segmentation"
+		]
+	},
+	"variables": [
+		{
+			"id": "application",
+			"required": true,
+			"name": "Application",
+			"description": "The chosen application to secure",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key",
+						"value"
+					],
+					"placeholders": {
+						"key": "application",
+						"value": "application"
+					}
+				}
+			],
+			"configuration_id": "application_label_key"
+		},
+		{
+			"id": "role",
+			"required": false,
+			"name": "Role",
+			"description": "The chosen role label key",
+			"creation_format": "by {{role}}",
+			"tweak_format": "by {{role}}",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key"
+					],
+					"placeholders": {
+						"key": "Role"
+					}
+				}
+			]
+		},
+		{
+			"id": "environment",
+			"required": false,
+			"name": "Environment",
+			"description": "The chosen environment label key",
+			"creation_format": "by {{environment}}.",
+			"tweak_format": "by {{environment}}",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key"
+					],
+					"placeholders": {
+						"key": "Environment"
+					}
+				}
+			]
+		}
+	],
+	"project_suggestion_format": "{{project_name}} {{application}}",
+	"project_title_format": "{{project_name}}",
+	"project_creation_format": "{{project_name}} {{application}} {{role:creation_format}} {{environment:creation_format}}",
+	"rules": [
+		{
+			"ports": [],
+			"port_ranges": [],
+			"ip_protocols": [
+				"TCP",
+				"UDP"
+			],
+			"section": "ALERT",
+			"comments": "Alert on all incoming traffic to the application",
+			"source": {
+				"labels": [],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			},
+			"destination": {
+				"labels": [
+					"{{application}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			}
+		},
+				{
+			"ports": [],
+			"port_ranges": [],
+			"ip_protocols": [
+				"TCP",
+				"UDP"
+			],
+			"section": "ALERT",
+			"comments": "Alert on all outgoing traffic from the application",
+			"source": {
+				"labels": [
+					"{{application}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			},
+			"destination": {
+				"labels": [],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			}
+		}
+	],
+	"default_map": {
+		"use_scheduled_map": false,
+		"time_frame": "THIS_MONTH",
+		"filters": {
+			"include": {
+				"user_label": [
+					"{{application}}"
+				]
+			},
+			"exclude": {}
+		},
+		"grouping": [
+			"{{environment}}",
+			"{{application}}",
+			"{{role}}"
+		],
+		"open_selected_hierarchy": true
+	}
+	}

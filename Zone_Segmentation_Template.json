@@ -1,0 +1,171 @@
+{
+	"api_version": "1.0",
+	"project_name": "Zone Segmentation project four labels",
+	"id": "Zone Segmentation four labels",
+	"author": "Manisha Singh",
+	"icon_url": "https://cdn.services.guardicore.com/images/policy-tier-icon.svg",
+	"project_version": "2.0",
+	"user_configuration_defaults": {
+		"include_process_level": true,
+		"ignore_all_existing_allowed_flows": false
+	},
+	"template_configuration": {
+		"add_all_map_flows_as_allow_rules": true
+	},
+	"hashtags": {
+		"visible": [
+			"diy"
+		],
+		"hidden": [
+			"tier segmentation",
+			"application",
+			"microsegmentation",
+			"micro-segmentation"
+		]
+	},
+	"variables": [{
+			"id": "application",
+			"required": true,
+			"name": "Application",
+			"description": "The chosen application to secure",
+			"types": [{
+				"type": "LABEL",
+				"fields": [
+					"key"
+				],
+				"placeholders": {
+					"key": "application"
+				}
+			}],
+			"configuration_id": "application_label_key"
+		},
+		{
+			"id": "tier",
+			"required": true,
+			"name": "Tier",
+			"description": "The chosen tier/role label key",
+			"types": [{
+				"type": "LABEL",
+				"fields": [
+					"key"
+				],
+				"placeholders": {
+					"key": "Role"
+				}
+			}]
+		},
+		{
+			"id": "zone",
+			"required": true,
+			"name": "Zone",
+			"description": "The chosen zone label key",
+			"types": [{
+				"type": "LABEL",
+				"fields": [
+					"key",
+					"value"
+				],
+				"placeholders": {
+					"key": "zone",
+					"value": "a zone"
+				}
+			}]
+		},
+		{
+			"id": "environment",
+			"required": true,
+			"name": "Environment",
+			"description": "An environment for which the application is running",
+			"creation_format": "within {{environment}}",
+			"tweak_format": "within {{environment}}",
+			"types": [{
+				"type": "LABEL",
+				"fields": [
+					"key"
+				],
+				"placeholders": {
+					"key": "environment"
+				}
+			}]
+		}
+	],
+	"project_suggestion_format": "{{project_name}} by allowlisting flows between {{zone}}'s tiers",
+	"project_title_format": "{{project_name}} by allowlisting flows between application tiers",
+	"project_creation_format": "{{project_name}} by allowlisting flows between {{application}}'s tiers, by tier label key {{tier}} {{environment:creation_format}} {{zone}}",
+	"rules": [{
+			"ports": [],
+			"port_ranges": [],
+			"ip_protocols": [
+				"TCP",
+				"UDP"
+			],
+			"section": "ALERT",
+			"comments": "Alert on all incoming traffic to the application",
+			"source": {
+				"labels": [
+					"{{zone}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			},
+			"destination": {
+				"labels": [
+					"{{zone}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			}
+		},
+		{
+			"ports": [],
+			"port_ranges": [],
+			"ip_protocols": [
+				"TCP",
+				"UDP"
+			],
+			"section": "ALERT",
+			"comments": "Alert on all outgoing traffic from the application",
+			"source": {
+				"labels": [
+					"{{zone}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			},
+			"destination": {
+				"labels": [
+					"{{zone}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			}
+		}
+	],
+	"default_map": {
+		"use_scheduled_map": false,
+		"time_frame": "THIS_MONTH",
+		"filters": {
+			"include": {
+				"user_label": [
+					"{{zone}}"
+				]
+			},
+			"exclude": {}
+		},
+		"grouping": [
+			"{{zone}}",
+			"{{environment}}",
+			"{{application}}",
+			"{{tier}}"
+		],
+		"open_selected_hierarchy": true
+	}
+}

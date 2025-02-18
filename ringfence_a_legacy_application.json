@@ -1,0 +1,210 @@
+{
+	"api_version": "1.0",
+	"author": "Johannes Herminghaus",
+	"project_name": "Ring Fence a Legacy Application",
+	"id": "Ring Fence a Legacy Application",
+	"icon_url": "https://cdn.services.guardicore.com/images/policy-ring-icon.svg",
+	"project_version": "1.0",
+	"user_configuration_defaults": {
+		"include_process_level": false,
+		"ignore_all_existing_allowed_flows": true
+	},
+	"template_configuration": {
+		"add_all_map_flows_as_allow_rules": true
+	},
+	"hashtags": {
+		"visible": [
+			"diy"
+		],
+		"hidden": [
+			"ring fence",
+			"application",
+			"incoming flows",
+			"allow incoming traffic",
+			"ring-fence",
+			"ring-fencing",
+			"ringfence",
+			"ringfencing",
+			"ring fencing",
+			"outgoing flows",
+			"inbound",
+			"outbound"
+		]
+	},
+	"variables": [
+		{
+			"id": "application",
+			"required": true,
+			"name": "Application",
+			"description": "The chosen application to secure",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key",
+						"value"
+					],
+					"placeholders": {
+						"key": "application",
+						"value": "an application"
+					}
+				}
+			],
+			"configuration_id": "application_label_key"
+		},
+		{
+			"id": "legacy",
+			"required": true,
+			"name": "Legacy",
+			"creation_format": "{{legacy}}",
+			"tweak_format": "{{legacy}}",
+			"description": "Choose whether the application OS is Legacy Yes/No",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key",
+						"value"
+					],
+					"placeholders": {
+						"key": "legacy",
+						"value": "legacy"
+					}
+				}
+			]
+		},
+		{
+			"id": "environment",
+			"required": false,
+			"name": "Environment",
+			"description": "An environment for which the application is running",
+			"creation_format": "within {{environment}}",
+			"tweak_format": "Secure the application within {{environment}}",
+			"types": [
+				{
+					"type": "LABEL",
+					"fields": [
+						"key",
+						"value"
+					],
+					"placeholders": {
+						"key": "environment",
+						"value": "an environment"
+					}
+				}
+			]
+		}
+	],
+	"project_suggestion_format": "{{project_name}} by allowlisting inbound and outbound flows for  {{legacy}} {{application}}",
+	"project_title_format": "{{project_name}} by allowlisting inbound and outbound flows for an application",
+	"project_creation_format": "{{project_name}} by allowlisting inbound and outbound flows for {{legacy}} {{application}} {{environment:creation_format}}",
+	"rules": [
+			{
+			"ports": [],
+			"port_ranges": [],
+			"ip_protocols": [
+				"TCP",
+				"UDP"
+			],
+			"section": "ALLOW",
+			"comments": "Allow all traffic within the application and application tiers",
+			"source": {
+				"labels": [
+					"{{environment}}",
+					"{{legacy}}",
+					"{{application}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			},
+			"destination": {
+				"labels": [
+					"{{environment}}",
+					"{{application}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			}
+		},
+		{
+			"ports": [],
+			"port_ranges": [],
+			"ip_protocols": [
+				"TCP",
+				"UDP"
+			],
+			"section": "ALERT",
+			"comments": "Alert on all incoming traffic to the application",
+			"source": {
+				"labels": [],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			},
+			"destination": {
+				"labels": [
+					"{{environment}}",
+					"{{legacy}}",
+					"{{application}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			}
+		},
+				{
+			"ports": [],
+			"port_ranges": [],
+			"ip_protocols": [
+				"TCP",
+				"UDP"
+			],
+			"section": "ALERT",
+			"comments": "Alert on all outgoing traffic from the application",
+			"source": {
+				"labels": [
+					"{{environment}}",
+					"{{legacy}}",
+					"{{application}}"
+				],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			},
+			"destination": {
+				"labels": [],
+				"user_groups": [],
+				"processes": [],
+				"subnets": [],
+				"domains": []
+			}
+		}
+	],
+	"default_map": {
+		"use_scheduled_map": false,
+		"time_frame": "THIS_MONTH",
+		"filters": {
+			"include": {
+				"user_label": [
+					"{{environment}}",
+					"{{application}}",
+					"{{legacy}}"
+				]
+			},
+			"exclude": {}
+		},
+		"grouping": [
+			"{{environment}}",
+			"{{application}}",
+			"{{legacy}}"
+		],
+		"open_selected_hierarchy": true
+	}
+}
