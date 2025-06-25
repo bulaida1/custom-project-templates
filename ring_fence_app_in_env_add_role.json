@@ -147,13 +147,12 @@
 		"time_frame": "THIS_MONTH",
 		"filters": {
 			"include": {
-				"include": {
-					"user_label": [
-						"{{environment}}",
-						"{{application}}"
+				"user_label": [
+					"{{environment}}",
+					"{{application}}"
 					]
 				},
-				"exclude": {}
+			"exclude": {}
 			},
 		"grouping": [
 			"{{environment}}",
@@ -161,6 +160,5 @@
 			"{{tier}}"
 		],
 		"open_selected_hierarchy": true
-	}
 	}
 	}
